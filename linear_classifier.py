@@ -31,6 +31,25 @@ def readData():
 
 	return images, images_t, labels, labels_t
 
+
+def linearModel(weights, bias, x):
+	y = weights*x + bias
+
+	return y
+
+
+
+
+def loss(y_pred, y_actual):
+	
+
+
+
+
+
+	
+
+
 def trainClassifier():
 
 
