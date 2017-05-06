@@ -2,6 +2,31 @@ import numpy as np
 import gzip
 import struct
 import random
+import math
+
+
+weights = []
+bias = []
+epochs = 30 #number of training cycles
+
+
+
+
+
+
+def main():
+
+	images_train, images_test, labels_train, labels_test = readData()
+
+
+	#train classifier
+	weights_t, bias_t = trainClassifier(epochs, images_train, labels_train, weights, bias)
+
+	accuracy = testClassifier(images_test, labels_test, weights_t, bias_t)
+
+	print "Accuracy: " + str(accuracy) + "%"
+
+
 
 def readData():
 	image_train_filename = 'data/train-images-idx3-ubyte.gz'
@@ -33,33 +58,55 @@ def readData():
 
 
 def linearModel(weights, bias, x):
-	y = weights*x + bias
+	y_i = weights*x + bias
+
+
+	y = 1/(1+math.exp(y_i))
 
 	return y
 
 
 
 
-def loss(y_pred, y_actual):
-	
-
-
+def loss(y_pred, y_actual, weights, x):
 
 
 
 	
 
+def gradientEval(loss, weights):
 
-def trainClassifier():
+
+
+
+
+def gradientUpdate(weights, weights_grad):
+
+	w = weights + weights_grad
+
+	return w
+
+
+
+def trainClassifier(epochs, x, y, weights, bias):
 
 
 	print "Training"
 
+	for i in range(0,epochs):
+		y_pred= linearModel(weights, bias, x)
+		loss = loss(y_pred, y, weights, x)
+		gradient = gradientEval(loss, weights)
+		weights = gradientUpdate(weights, gradient)
+
+
+	return weights, bias	
 
 
 
 
-def testClassifier(images, labels):
+
+def testClassifier(images, labels, weights, bias):
 	correct = 0
 	total = 0
 	guess = []
@@ -81,15 +128,6 @@ def testClassifier(images, labels):
 	accuracy = (correct/ float(total))*100
 
 	return accuracy
-
-
-
-def main():
-	images_train, images_test, labels_train, labels_test = readData()
-
-	accuracy = testClassifier(images_test, labels_test)
-
-	print "Accuracy = " + str(accuracy) + "%"
 
 
 
