@@ -11,13 +11,9 @@ epochs = 30 #number of training cycles
 
 
 
-
-
-
 def main():
 
 	images_train, images_test, labels_train, labels_test = readData()
-
 
 	#train classifier
 	weights_t, bias_t = trainClassifier(epochs, images_train, labels_train, weights, bias)
@@ -68,14 +64,17 @@ def linearModel(weights, bias, x):
 
 
 
-def loss(y_pred, y_actual, weights, x):
+def loss(y_pred, y_actual):
+	print "Calculating Loss"
+	loss = (1/math.log(2))*math.log(1+math.exp(-y_actual*y_pred))
+
+	loss_min = 
 
 
 
-	
 
 def gradientEval(loss, weights):
-
+	print "Evaluating Gradient"
 
 
 
@@ -95,7 +94,7 @@ def trainClassifier(epochs, x, y, weights, bias):
 
 	for i in range(0,epochs):
 		y_pred= linearModel(weights, bias, x)
-		loss = loss(y_pred, y, weights, x)
+		loss = loss(y_pred, y)
 		gradient = gradientEval(loss, weights)
 		weights = gradientUpdate(weights, gradient)
 
