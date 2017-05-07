@@ -5,22 +5,29 @@ import random
 import math
 
 
-weights = []
-bias = []
 epochs = 30 #number of training cycles
-
+n_samples=60,000
 
 
 def main():
 
 	images_train, images_test, labels_train, labels_test = readData()
+	weights = np.ones_like(images_train)
+
+
+	y = linearModel(weights, images_train)
+
+	accuracy = loss(labels_train, y)
+
+	print accuracy
 
 	#train classifier
-	weights_t, bias_t = trainClassifier(epochs, images_train, labels_train, weights, bias)
+	#weights_t = trainClassifier(epochs, images_train, labels_train, weights)
 
-	accuracy = testClassifier(images_test, labels_test, weights_t, bias_t)
+	#test classifier
+	#accuracy = testClassifier(images_test, labels_test, weights_t)
 
-	print "Accuracy: " + str(accuracy) + "%"
+	#print "Accuracy: " + str(accuracy) + "%"
 
 
 
@@ -53,29 +60,27 @@ def readData():
 	return images, images_t, labels, labels_t
 
 
-def linearModel(weights, bias, x):
-	y_i = weights*x + bias
+def linearModel(weights, x):
+	y_i = weights*x
+	print y_i[1]
 
+	#y = 1/(1+math.exp(y_i))
 
-	y = 1/(1+math.exp(y_i))
-
-	return y
+	return y_i
 
 
 
 
 def loss(y_pred, y_actual):
 	print "Calculating Loss"
-	loss = (1/math.log(2))*math.log(1+math.exp(-y_actual*y_pred))
-
-	loss_min = 
-
+	#cross entropy loss
+	loss = -(1/n_samples)*np.sum(y_actual*math.log10(y_pred) + (1-y_actual)*math.log10(1-y_pred))
 
 
 
 def gradientEval(loss, weights):
 	print "Evaluating Gradient"
-
+	
 
 
 
@@ -87,25 +92,25 @@ def gradientUpdate(weights, weights_grad):
 
 
 
-def trainClassifier(epochs, x, y, weights, bias):
+def trainClassifier(epochs, x, y, weights):
 
 
 	print "Training"
 
 	for i in range(0,epochs):
-		y_pred= linearModel(weights, bias, x)
+		y_pred= linearModel(weights, x)
 		loss = loss(y_pred, y)
 		gradient = gradientEval(loss, weights)
 		weights = gradientUpdate(weights, gradient)
 
 
-	return weights, bias	
+	return weights	
 
 
 
 
 
-def testClassifier(images, labels, weights, bias):
+def testClassifier(images, labels, weights):
 	correct = 0
 	total = 0
 	guess = []
