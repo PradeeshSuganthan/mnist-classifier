@@ -11,23 +11,26 @@ n_samples=60,000
 
 def main():
 
+	#read in data
 	images_train, images_test, labels_train, labels_test = readData()
-	weights = np.ones_like(images_train)
+
+	#randomly initialize weights
+	weights = np.random.rand(784,10)
 
 
-	y = linearModel(weights, images_train)
+	#y = linearModel(weights, images_train)
 
-	accuracy = loss(labels_train, y)
+	#accuracy = loss(labels_train, y)
 
-	print accuracy
+	#print accuracy
 
 	#train classifier
 	#weights_t = trainClassifier(epochs, images_train, labels_train, weights)
 
 	#test classifier
-	#accuracy = testClassifier(images_test, labels_test, weights_t)
+	accuracy = testClassifier(images_test, labels_test, weights)
 
-	#print "Accuracy: " + str(accuracy) + "%"
+	print "Accuracy: " + str(accuracy) + "%"
 
 
 
@@ -60,14 +63,20 @@ def readData():
 
 
 def linearModel(weights, x):
-	y_i = weights*x
+	#linear model
+	y_i = x.dot(weights)
 	print y_i[1]
 
-	#y = 1/(1+math.exp(y_i))
+	#activation function
+	y = softmax(y_i)
+	print y[1]
 
 	return y_i
 
+def softmax(y):
+	y_soft = 1/(1+math.exp(y))
 
+	return y_soft
 
 
 def loss(y_pred, y_actual):
