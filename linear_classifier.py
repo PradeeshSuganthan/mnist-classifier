@@ -4,9 +4,10 @@ import struct
 import random
 
 epochs = 30 #number of training cycles
-n_samples=60,000
+n_samples=60000 #number of samples
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
 y_test = np.zeros((10000,10)) #initialize for one-hot encoding
+alpha = 10 #learning rate
 
 
 def main():
@@ -21,15 +22,8 @@ def main():
 	y_train[np.arange(60000), labels_train] = 1
 	y_test[np.arange(10000), labels_test] = 1
 
-
-	y = linearModel(weights, images_train)
-
-	cost = loss(y, y_train)
-
-	print "Loss: " + str(cost)
-
 	#train classifier
-	#weights_t = trainClassifier(epochs, images_train, labels_train, weights)
+	weights_t = trainClassifier(epochs, images_train, y_train, weights)
 
 	#test classifier
 #	accuracy = testClassifier(images_test, labels_test, weights)
@@ -86,25 +80,29 @@ def softmax(y):
 
 
 def loss(y_pred, y_actual):
-	print "Calculating Loss"
 	#cross entropy loss
-	#log of y_pred multiplied by y actual
-	error_sum = y_actual * np.log10(y_pred)
+	#y_actual multiplied by log of y_pred
+	#error_sum = y_actual * np.log10(y_pred)
 	#sum
-	error = -np.sum(error_sum)
+	#error = -np.sum(error_sum)
+
+	#Least squares error 
+	error = np.sum((y_pred-y_actual)**2)
 	return error
 
 
 
-def gradientEval(loss, weights):
-	print "Evaluating Gradient"
-	
+def gradientEval(X, y_pred, y_actual):
+
+	gradient = (y_actual - y_pred).T.dot(X)
+
+	return gradient
 
 
 
 def gradientUpdate(weights, weights_grad):
 
-	w = weights + weights_grad
+	w = weights + -alpha * weights_grad.T
 
 	return w
 
@@ -117,9 +115,11 @@ def trainClassifier(epochs, x, y, weights):
 
 	for i in range(0,epochs):
 		y_pred= linearModel(weights, x)
-		loss = loss(y_pred, y)
-		gradient = gradientEval(loss, weights)
+		cost = loss(y_pred, y)
+		gradient = gradientEval(x, y_pred, y)
 		weights = gradientUpdate(weights, gradient)
+
+		print "Cost " + str(i) + ": " + str(cost)
 
 
 	return weights	
