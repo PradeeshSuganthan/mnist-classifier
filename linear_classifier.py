@@ -2,8 +2,6 @@ import numpy as np
 import gzip
 import struct
 import random
-import math
-
 
 epochs = 30 #number of training cycles
 n_samples=60,000
@@ -26,9 +24,9 @@ def main():
 
 	y = linearModel(weights, images_train)
 
-	accuracy = loss(labels_train, y)
+	cost = loss(y, y_train)
 
-	#print accuracy
+	print cost
 
 	#train classifier
 	#weights_t = trainClassifier(epochs, images_train, labels_train, weights)
@@ -91,10 +89,10 @@ def loss(y_pred, y_actual):
 	print "Calculating Loss"
 	#cross entropy loss
 	#log of y_pred multiplied by y actual
-	
+	error_sum = y_actual * np.log10(y_pred)
 	#sum
-
-	#
+	error = -np.sum(error_sum)
+	return error
 
 
 
