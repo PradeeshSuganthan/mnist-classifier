@@ -6,8 +6,7 @@ import random
 epochs = 30 #number of training cycles
 n_samples=60000 #number of samples
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
-y_test = np.zeros((10000,10)) #initialize for one-hot encoding
-alpha = 10 #learning rate
+alpha = 100 #learning rate
 
 
 def main():
@@ -20,15 +19,14 @@ def main():
 
 	#one-hot encode labels
 	y_train[np.arange(60000), labels_train] = 1
-	y_test[np.arange(10000), labels_test] = 1
 
 	#train classifier
 	weights_t = trainClassifier(epochs, images_train, y_train, weights)
 
 	#test classifier
-#	accuracy = testClassifier(images_test, labels_test, weights)
+	accuracy = testClassifier(images_test, labels_test, weights_t)
 
-	#print "Accuracy: " + str(accuracy) + "%"
+	print "Accuracy: " + str(accuracy) + "%"
 
 
 
@@ -131,18 +129,18 @@ def trainClassifier(epochs, x, y, weights):
 def testClassifier(images, labels, weights):
 	correct = 0
 	total = 0
-	guess = []
+	prediction = []
 
 	print "Testing"
+	y_pred= linearModel(weights, images)
 
-	#Guess a random number for each image
-	for i in images:
-		guess.append(random.randint(0,9))
-
+	#predictions for test images
+	for i in range(len(y_pred)):
+		prediction.append(np.argmax(y_pred[i]))
 
 	#Check accuracy of guess
-	for i in range(0,len(guess)):
-		if guess[i] == labels[i]:
+	for i in range(0,len(y_pred)):
+		if prediction[i] == labels[i]:
 			correct += 1
 
 		total += 1
