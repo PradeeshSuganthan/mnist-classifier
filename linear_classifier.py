@@ -7,6 +7,8 @@ import math
 
 epochs = 30 #number of training cycles
 n_samples=60,000
+y_train = np.zeros((60000,10)) #initialize for one-hot encoding
+y_test = np.zeros((10000,10)) #initialize for one-hot encoding
 
 
 def main():
@@ -16,6 +18,10 @@ def main():
 
 	#randomly initialize weights
 	weights = .01*np.random.rand(784,10)
+
+	#one-hot encode labels
+	y_train[np.arange(60000), labels_train] = 1
+	y_test[np.arange(10000), labels_test] = 1
 
 
 	y = linearModel(weights, images_train)
@@ -70,7 +76,7 @@ def linearModel(weights, x):
 	#activation function
 	for i in range(len(y_i)):
 		y_probs = softmax(y_i[i])
-		y_pred.append(np.argmax(y_probs))
+		y_pred.append(y_probs)
 
 	return y_pred
 
@@ -84,7 +90,11 @@ def softmax(y):
 def loss(y_pred, y_actual):
 	print "Calculating Loss"
 	#cross entropy loss
-	loss = -(1/n_samples)*np.sum(y_actual*math.log10(y_pred) + (1-y_actual)*math.log10(1-y_pred))
+	#log of y_pred multiplied by y actual
+	
+	#sum
+
+	#
 
 
 
