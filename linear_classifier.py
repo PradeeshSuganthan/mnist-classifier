@@ -4,9 +4,8 @@ import struct
 import random
 
 epochs = 30 #number of training cycles
-n_samples=60000 #number of samples
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
-alpha = 100 #learning rate
+alpha = .01 #learning rate
 
 
 def main():
@@ -116,6 +115,8 @@ def trainClassifier(epochs, x, y, weights):
 		cost = loss(y_pred, y)
 		gradient = gradientEval(x, y_pred, y)
 		weights = gradientUpdate(weights, gradient)
+
+		#print "Gradient: " + str(gradient[1])
 
 		print "Cost " + str(i) + ": " + str(cost)
 
