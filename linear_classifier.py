@@ -26,7 +26,7 @@ def main():
 
 	cost = loss(y, y_train)
 
-	print cost
+	print "Loss: " + str(cost)
 
 	#train classifier
 	#weights_t = trainClassifier(epochs, images_train, labels_train, weights)
