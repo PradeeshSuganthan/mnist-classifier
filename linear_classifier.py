@@ -5,7 +5,7 @@ import random
 
 epochs = 30 #number of training cycles
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
-alpha = .01 #learning rate
+alpha = 100 #learning rate
 
 
 def main():
@@ -21,7 +21,6 @@ def main():
 
 	#train classifier
 	weights_t = trainClassifier(epochs, images_train, y_train, weights)
-
 	#test classifier
 	accuracy = testClassifier(images_test, labels_test, weights_t)
 
@@ -99,7 +98,7 @@ def gradientEval(X, y_pred, y_actual):
 
 def gradientUpdate(weights, weights_grad):
 
-	w = weights + -alpha * weights_grad.T
+	w = weights + alpha * weights_grad.T
 
 	return w
 
