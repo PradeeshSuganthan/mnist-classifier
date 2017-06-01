@@ -14,7 +14,7 @@ def main():
 	#read in data
 	images_train, images_test, labels_train, labels_test = readData()
 
-	#randomly initialize weights
+	#randomly initialize weights and biases
 	weights = .01*np.random.rand(784,10)
 	bias = .01*np.random.rand(10000,10)
 
@@ -26,9 +26,9 @@ def main():
 	y_train_b = np.split(y_train, batchsize)
 
 	#train classifier
-	weights_t = trainClassifier(epochs, images_train_b, y_train_b, weights, bias)
+	weights_t, bias_t = trainClassifier(epochs, images_train_b, y_train_b, weights, bias)
 	#test classifier
-	accuracy = testClassifier(images_test, labels_test, weights_t, bias)
+	accuracy = testClassifier(images_test, labels_test, weights_t, bias_t)
 
 	print "Accuracy: " + str(accuracy) + "%"
 
@@ -95,18 +95,20 @@ def loss(y_pred, y_actual):
 
 
 def gradientEval(X, y_pred, y_actual):
+	delta = y_actual-y_pred
+	gradient = delta.T.dot(X)
 
-	gradient = (y_actual - y_pred).T.dot(X)
-
-	return gradient
+	return gradient, delta
 
 
 
-def gradientUpdate(weights, weights_grad):
+def gradientUpdate(weights, bias, gradient, delta):
 
-	w = weights + alpha * weights_grad.T
+	w = weights + alpha * gradient.T
 
-	return w
+	b = bias + alpha * delta
+
+	return w, b
 
 
 
@@ -122,15 +124,13 @@ def trainClassifier(epochs, x, y, weights, bias):
 		for j in range(0, epochs):
 			y_pred= linearModel(weights, x[i], bias)
 			cost = loss(y_pred, y[i])
-			gradient = gradientEval(x[i], y_pred, y[i])
-			weights = gradientUpdate(weights, gradient)
+			gradient, delta = gradientEval(x[i], y_pred, y[i])
+			weights, bias = gradientUpdate(weights, bias, gradient, delta)
 
 			print "Cost " + str(j) + ": " + str(cost)
 
 
-	return weights	
-
-
+	return weights, bias
 
 
 
