@@ -6,10 +6,11 @@ import random
 epochs = 30 #number of training cycles
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
 alpha = 100 #learning rate
+batchsize = 6
 
 
 def main():
-
+	print "Test"
 	#read in data
 	images_train, images_test, labels_train, labels_test = readData()
 
@@ -19,8 +20,14 @@ def main():
 	#one-hot encode labels
 	y_train[np.arange(60000), labels_train] = 1
 
+	print "Pre-batching"
+	#batch data
+	images_train_b = np.split(images_train, batchsize)
+
+	y_train_b = np.split(y_train, batchsize)
+
 	#train classifier
-	weights_t = trainClassifier(epochs, images_train, y_train, weights)
+	weights_t = trainClassifier(epochs, images_train_b, y_train_b, weights)
 	#test classifier
 	accuracy = testClassifier(images_test, labels_test, weights_t)
 
@@ -109,15 +116,17 @@ def trainClassifier(epochs, x, y, weights):
 
 	print "Training"
 
-	for i in range(0,epochs):
-		y_pred= linearModel(weights, x)
-		cost = loss(y_pred, y)
-		gradient = gradientEval(x, y_pred, y)
-		weights = gradientUpdate(weights, gradient)
 
-		#print "Gradient: " + str(gradient[1])
 
-		print "Cost " + str(i) + ": " + str(cost)
+	for i in range(0,batchsize):
+		print "Batch #" + str(i + 1) + ": "
+		for j in range(0, epochs):
+			y_pred= linearModel(weights, x[i])
+			cost = loss(y_pred, y[i])
+			gradient = gradientEval(x[i], y_pred, y[i])
+			weights = gradientUpdate(weights, gradient)
+
+			print "Cost " + str(j) + ": " + str(cost)
 
 
 	return weights	
