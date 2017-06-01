@@ -16,20 +16,19 @@ def main():
 
 	#randomly initialize weights
 	weights = .01*np.random.rand(784,10)
+	bias = .01*np.random.rand(10000,10)
 
 	#one-hot encode labels
 	y_train[np.arange(60000), labels_train] = 1
 
-	print "Pre-batching"
 	#batch data
 	images_train_b = np.split(images_train, batchsize)
-
 	y_train_b = np.split(y_train, batchsize)
 
 	#train classifier
-	weights_t = trainClassifier(epochs, images_train_b, y_train_b, weights)
+	weights_t = trainClassifier(epochs, images_train_b, y_train_b, weights, bias)
 	#test classifier
-	accuracy = testClassifier(images_test, labels_test, weights_t)
+	accuracy = testClassifier(images_test, labels_test, weights_t, bias)
 
 	print "Accuracy: " + str(accuracy) + "%"
 
@@ -63,10 +62,10 @@ def readData():
 	return images, images_t, labels, labels_t
 
 
-def linearModel(weights, x):
+def linearModel(weights, x, bias):
 	y_pred = []
 	#linear model
-	y_i = x.dot(weights)
+	y_i = x.dot(weights) + bias
 
 	#activation function
 	for i in range(len(y_i)):
@@ -111,7 +110,7 @@ def gradientUpdate(weights, weights_grad):
 
 
 
-def trainClassifier(epochs, x, y, weights):
+def trainClassifier(epochs, x, y, weights, bias):
 
 
 	print "Training"
@@ -121,7 +120,7 @@ def trainClassifier(epochs, x, y, weights):
 	for i in range(0,batchsize):
 		print "Batch #" + str(i + 1) + ": "
 		for j in range(0, epochs):
-			y_pred= linearModel(weights, x[i])
+			y_pred= linearModel(weights, x[i], bias)
 			cost = loss(y_pred, y[i])
 			gradient = gradientEval(x[i], y_pred, y[i])
 			weights = gradientUpdate(weights, gradient)
@@ -135,13 +134,13 @@ def trainClassifier(epochs, x, y, weights):
 
 
 
-def testClassifier(images, labels, weights):
+def testClassifier(images, labels, weights, bias):
 	correct = 0
 	total = 0
 	prediction = []
 
 	print "Testing"
-	y_pred= linearModel(weights, images)
+	y_pred= linearModel(weights, images, bias)
 
 	#predictions for test images
 	for i in range(len(y_pred)):
