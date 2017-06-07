@@ -1,7 +1,8 @@
 # mnist-classifier
 Experimenting with MNIST
 
+Linear classifier (python w/ numpy): ~90% accuracy
 
-Random guess classifier: ~10% accuracy
+Neural Net (Tensorflow): 
 
-Linear classifier: ~90% accuracy
+Neural Net (Keras): 
