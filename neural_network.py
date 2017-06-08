@@ -1,3 +1,4 @@
+#based off of neuralnetworksanddeeplearning.com
 import numpy as np 
 import gzip
 import struct
@@ -7,7 +8,7 @@ epochs = 10 #number of training cycles
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
 alpha = 100 #learning rate
 batchsize = 6
-
+num_neurons
 
 def main():
 	print "Test"
@@ -73,11 +74,11 @@ def forwardPass(weights, x, bias):
 
 	return y_pred
 
-def softmax(y):
-	y_s = np.exp(y-np.max(y))
-	y_soft = y_s/y_s.sum()
+# def softmax(y):
+# 	y_s = np.exp(y-np.max(y))
+# 	y_soft = y_s/y_s.sum()
 
-	return y_soft
+# 	return y_soft
 
 
 def loss(y_pred, y_actual):
@@ -111,9 +112,13 @@ def sgd(training_data, weights, biases):
 
 
 def gradientUpdate(weights, bias):
+	nabla_b = [np.zeros(b.shape) for b in bias]
+	nabla_w = [np.zeros(w.shape) for w in weights]
 	#obtain gradients
 	deltaW, deltaB = backprop()
 
+	deltaW = deltaW + nabla_w
+	deltaB = deltaB + nabla_b
 	#update weights & biases
 	w = (weights - (alpha/len(miniBatch))*deltaw)
 	b = (bias - (alpha/len(minibatch))*deltaB)
@@ -121,27 +126,48 @@ def gradientUpdate(weights, bias):
 	return w, b
 
 
-def backprop(x, y):
-	
+def backprop(x, y, weights, bias):
+
+	nabla_b = [np.zeros(b.shape) for b in bias]
+	nabla_w = [np.zeros(w.shape) for w in weights]
+
+	#feedforward
+	activation = x
+
+	activation_list = [x]
+	z_list = []
+
+	for w, b in zip(weights, bias):
+		z = np.dot(w, activation) + b
+		z_list.append(z)
+
+		activation = softmax(z)
+		activation_list.append(activation)
+
+	#backward pass
+	delta = cost_derivative(activation_list[-1], y) * sigmoid_deriv(z_list[-1])
+
+	nabla_b[-1] = delta
+	nabla_w[-1] = np.dot(delta, activation_list[-2].T)
+
+	for l in xrange(2, num_neurons):
+		z = z_list[-1]
+		sd = sigmoid_deriv(z)
+		delta = np.dot(weights[-l + 1].T, delta) * sd
+		nabla_b[-1] = delta
+		nabla_w[-1] = np.dot(delta, activation_list[-l-1].T)
+
+	return (nabla_w, nabla_b)
 
 
-def trainClassifier(epochs, x, y, weights, bias):
-	print "Training"
+def cost_derivative(output, y):
+	return (output - y)
 
-	for i in range(0,epochs):
-		print "Epoch #" + str(i + 1) + ": "
-		for j in range(0, batchsize):
-		#	y_pred= linearModel(weights, x[j], bias)
-		#	cost = loss(y_pred, y[j])
-		#	gradient, delta = gradientEval(x[j], y_pred, y[j])
-		#	weights, bias = gradientUpdate(weights, bias, gradient, delta)
+def softmax(z):
+	return 1.0/(1.0 + np.exp(-z))
 
-			print "Cost " + str(j + 1) + ": " + str(cost)
-
-
-	return weights, bias
-
-
+def softmax_deriv(z):
+	return softmax(z) * (1 - softmax(z))
 
 def testClassifier(images, labels, weights, bias):
 	correct = 0
