@@ -3,7 +3,7 @@ import gzip
 import struct
 import random
 
-epochs = 30 #number of training cycles
+epochs = 10 #number of training cycles
 y_train = np.zeros((60000,10)) #initialize for one-hot encoding
 alpha = 100 #learning rate
 batchsize = 6
@@ -21,9 +21,8 @@ def main():
 	#one-hot encode labels
 	y_train[np.arange(60000), labels_train] = 1
 
-	#batch data
-	images_train_b = np.split(images_train, batchsize)
-	y_train_b = np.split(y_train, batchsize)
+	#group training data
+	training_data = zip(images_train, labels_train)
 
 	#train classifier
 	weights_t, bias_t = trainClassifier(epochs, images_train_b, y_train_b, weights, bias)
@@ -62,7 +61,7 @@ def readData():
 	return images, images_t, labels, labels_t
 
 
-def linearModel(weights, x, bias):
+def forwardPass(weights, x, bias):
 	y_pred = []
 	#linear model
 	y_i = x.dot(weights) + bias
@@ -94,36 +93,48 @@ def loss(y_pred, y_actual):
 
 
 
-def gradientEval(X, y_pred, y_actual):
-	delta = y_actual-y_pred
-	gradient = delta.T.dot(X)
+def sgd(training_data, weights, biases):
+	#train using stochastic gradient descent
+	for i in range(0,epochs):
+		#randomly shuffle data
+		random.shuffle(training_data)
+		#partition into batches
+		batches = np.split(training_data, batchsize)
+		#apply gradient descent for each batch
+		for batch in batches:
+			weights, biases = gradientUpdate(weights, biases)
 
-	return gradient, delta
+		print "Epoch " + str(i) + " complete"
+
+	return weights, biases
 
 
 
-def gradientUpdate(weights, bias, gradient, delta):
+def gradientUpdate(weights, bias):
+	#obtain gradients
+	deltaW, deltaB = backprop()
 
-	w = weights + alpha * gradient.T
-
-	b = bias + alpha * delta
+	#update weights & biases
+	w = (weights - (alpha/len(miniBatch))*deltaw)
+	b = (bias - (alpha/len(minibatch))*deltaB)
 
 	return w, b
 
 
+def backprop(x, y):
+	
+
 
 def trainClassifier(epochs, x, y, weights, bias):
-
-
 	print "Training"
 
 	for i in range(0,epochs):
 		print "Epoch #" + str(i + 1) + ": "
 		for j in range(0, batchsize):
-			y_pred= linearModel(weights, x[j], bias)
-			cost = loss(y_pred, y[j])
-			gradient, delta = gradientEval(x[j], y_pred, y[j])
-			weights, bias = gradientUpdate(weights, bias, gradient, delta)
+		#	y_pred= linearModel(weights, x[j], bias)
+		#	cost = loss(y_pred, y[j])
+		#	gradient, delta = gradientEval(x[j], y_pred, y[j])
+		#	weights, bias = gradientUpdate(weights, bias, gradient, delta)
 
 			print "Cost " + str(j + 1) + ": " + str(cost)
 
@@ -138,7 +149,7 @@ def testClassifier(images, labels, weights, bias):
 	prediction = []
 
 	print "Testing"
-	y_pred= linearModel(weights, images, bias)
+	y_pred= forwardPass(weights, images, bias)
 
 	#predictions for test images
 	for i in range(len(y_pred)):
