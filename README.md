@@ -1,10 +1,9 @@
 # mnist-classifier
-Experimenting with MNIST
+### Experimenting with MNIST and Neural Networks
 
-Linear classifier (python w/ numpy): ~70-90% accuracy
-
+Single-Layer Perceptron, Linear Classifier (python w/ numpy): ~70-90% accuracy
 
 (1 hidden layer, size 512)
-Layered-Neural Net (Tensorflow): ~93.4% accuracy
+Multi-Layered Perceptron (Tensorflow): ~93.4% accuracy
 
-Layered-Neural-Network (Keras): ~95.5% accuracy
+Multi-Layered Perceptron (Keras): ~95.5% accuracy
