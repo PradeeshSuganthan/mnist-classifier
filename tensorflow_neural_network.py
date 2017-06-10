@@ -37,8 +37,6 @@ def neural_network(x):
 
 	y3 = tf.matmul(y2, W3) + b3
 
-	#y = tf.nn.softmax(y3)
-
 	return y3
 
 
