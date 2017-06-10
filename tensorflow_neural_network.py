@@ -6,15 +6,15 @@ mnist = input_data.read_data_sets('MNIST_data/', one_hot = True)
 x = tf.placeholder(tf.float32, [None, 784])
 y_ = tf.placeholder(tf.float32, [None, 10])
 
-epochs = 10
-batch_size = 100
+epochs = 20
+batch_size = 128
 num_batches = int(mnist.train.num_examples/batch_size)
 learning_rate = 0.001
 
 #define layer sizes
 l_input = 784
-l1 = 256
-l2 = 256
+l1 = 512
+l2 = 512
 l_output = 10
 
 def neural_network(x):
@@ -29,6 +29,7 @@ def neural_network(x):
 	b2 = tf.Variable(tf.zeros([l2]))
 
 	y2 = tf.nn.relu(tf.matmul(y1, W2) + b2)
+
 
 	#Layer 3
 	W3 = tf.Variable(tf.random_normal([l2, l_output]))
@@ -68,7 +69,7 @@ def main():
 
 		accuracy = sess.run(acc, feed_dict = {x: mnist.test.images, y_: mnist.test.labels})
 
-		print "Testing accuracy: " + str(accuracy)
+		print "Testing accuracy: " + str(accuracy*100) + "%"
 
 		return accuracy
 

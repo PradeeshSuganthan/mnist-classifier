@@ -20,9 +20,7 @@ def main():
 	#create model
 	model = Sequential()
 	model.add(Dense(512, input_shape = (784,), activation='relu'))
-	model.add(Dropout(0.2))
 	model.add(Dense(512, activation='relu'))
-	model.add(Dropout(0.2))
 	model.add(Dense(10, activation='softmax'))
 
 	#model learning
