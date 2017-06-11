@@ -1,10 +1,12 @@
 import keras_neural_network as k
+import keras_cnn as kc
 import tensorflow_neural_network as t
+import tensorflow_cnn as tc
 
 accuracy = []
 
 for i in range(5):
-	accuracy.append(t.main())
+	accuracy.append(kc.main())
 
 total_accuracy = sum(accuracy)/float(len(accuracy))
 

@@ -8,3 +8,11 @@ Single-Layer Perceptron, Linear Classifier (python w/ numpy): ~70-90% accuracy
 Multi-Layered Perceptron (Tensorflow): ~93.4% accuracy
 
 Multi-Layered Perceptron (Keras): ~95.5% accuracy
+
+
+
+#### CNN
+
+Convolutional Neural Network (Tensorflow): 
+
+Convolutional Neural Network (Keras): ~97.9% accuracy
