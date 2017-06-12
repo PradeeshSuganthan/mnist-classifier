@@ -29,11 +29,11 @@ def main():
 	model.add(Dense(10, activation = 'softmax'))
 
 	#model learning
-	model.compile(optimizer='SGD', loss='categorical_crossentropy', metrics = ['accuracy'])
+	model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics = ['accuracy'])
 
 
 	#train
-	model.fit(x_train, y_train, epochs = 20, batch_size = 128, validation_data = (x_test, y_test))
+	model.fit(x_train, y_train, epochs = 50, batch_size = 100, validation_split= 0.1)
 
 	score = model.evaluate(x_test, y_test)
 

@@ -1,13 +1,13 @@
-import keras_neural_network as k
+import keras_perceptron as k
 import keras_cnn as kc
-import tensorflow_neural_network as t
+import tensorflow_perceptron as t
 import tensorflow_cnn as tc
 
 accuracy = []
 
 for i in range(5):
 	print "Test #" + str(i + 1)
-	accuracy.append(t.main())
+	accuracy.append(k.main())
 
 total_accuracy = sum(accuracy)/float(len(accuracy))
 

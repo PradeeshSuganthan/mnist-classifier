@@ -8,10 +8,10 @@ mnist = input_data.read_data_sets('MNIST_data/', one_hot = True, reshape = False
 x = tf.placeholder(tf.float32, [None, 28, 28, 1])
 y_ = tf.placeholder(tf.float32, [None, 10])
 
-epochs = 100
+epochs = 50
 batch_size = 100
 num_batches = int(mnist.train.num_examples/batch_size)
-learning_rate = 0.0001
+learning_rate = 0.001
 
 #define layer sizes
 l1 = 4	#conv layer output depth
@@ -57,9 +57,7 @@ def neural_network():
 	#FC layer
 	y4 = tf.nn.relu(tf.matmul(yy, W4) + b4)
 
-	ylogits = tf.matmul(y4, W5) + b5
-
-	y = tf.nn.relu(ylogits)
+	y = tf.matmul(y4, W5) + b5
 
 	return y
 
@@ -69,7 +67,7 @@ def main():
 
 	#define loss and optimizer
 	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = prediction, labels = y_))
-	optimizer = tf.train.GradientDescentOptimizer(learning_rate = learning_rate).minimize(cost)
+	optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost)
 
 	#accuracy
 	correct_prediction = tf.equal(tf.argmax(prediction, 1), tf.argmax(y_, 1))
@@ -86,8 +84,8 @@ def main():
 				batch_xs, batch_ys = mnist.train.next_batch(batch_size)
 				_, a = sess.run([optimizer,acc], feed_dict = {x: batch_xs, y_: batch_ys})
 
-			print "Epoch " + str(epoch + 1) + " out of " + str(epochs)
-			print "Accuracy: " + str(a*100) + "%"
+			print "Epoch " + str(epoch + 1) + " out of " + str(epochs) + ": Training accuracy = " + str(a*100) + "%"
+
 
 
 

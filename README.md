@@ -13,6 +13,6 @@ Multi-Layered Perceptron (Keras): ~98.3% accuracy
 
 #### CNN
 
-Convolutional Neural Network (Tensorflow): 
+Convolutional Neural Network (Tensorflow): 97.9% accuracy
 
-Convolutional Neural Network (Keras): ~97.9% accuracy
+Convolutional Neural Network (Keras): ~99.1% accuracy

@@ -65,7 +65,7 @@ def main():
 				batch_xs, batch_ys = mnist.train.next_batch(batch_size)
 				_, accuracy = sess.run([optimizer, acc], feed_dict = {x: batch_xs, y_: batch_ys})
 
-			print "epoch " + str(epoch + 1) + " out of " + str(epochs) + ": Training accuracy = " + str(accuracy*100) + "%"
+			print "Epoch " + str(epoch + 1) + " out of " + str(epochs) + ": Training accuracy = " + str(accuracy*100) + "%"
 
 		accuracy = sess.run(acc, feed_dict = {x: mnist.test.images, y_: mnist.test.labels})
 
