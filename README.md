@@ -3,11 +3,11 @@
 
 Single-Layer Perceptron, Linear Classifier (python w/ numpy): ~70-90% accuracy
 
-#### 1 hidden layer, size 512
+#### 1 hidden layer, size 784 -> 500 -> 200 -> 10
 
-Multi-Layered Perceptron (Tensorflow): ~93.4% accuracy
+Multi-Layered Perceptron (Tensorflow): ~98.1% accuracy
 
-Multi-Layered Perceptron (Keras): ~95.5% accuracy
+Multi-Layered Perceptron (Keras): ~98.3% accuracy
 
 
 

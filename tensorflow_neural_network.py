@@ -6,15 +6,15 @@ mnist = input_data.read_data_sets('MNIST_data/', one_hot = True)
 x = tf.placeholder(tf.float32, [None, 784])
 y_ = tf.placeholder(tf.float32, [None, 10])
 
-epochs = 20
-batch_size = 128
+epochs = 50
+batch_size = 100
 num_batches = int(mnist.train.num_examples/batch_size)
 learning_rate = 0.001
 
 #define layer sizes
 l_input = 784
-l1 = 512
-l2 = 512
+l1 = 500
+l2 = 200
 l_output = 10
 
 def neural_network(x):
@@ -46,7 +46,13 @@ def main():
 
 	#define loss and optimizer
 	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = prediction, labels = y_))
-	optimizer = tf.train.GradientDescentOptimizer(learning_rate = learning_rate).minimize(cost)
+	optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost)
+
+
+	#accuracy
+	correct_prediction = tf.equal(tf.argmax(prediction, 1), tf.argmax(y_, 1))
+	acc = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
 
 	#init
 	init = tf.global_variables_initializer()
@@ -57,13 +63,9 @@ def main():
 		for epoch in range(epochs):
 			for _ in range(num_batches):
 				batch_xs, batch_ys = mnist.train.next_batch(batch_size)
-				_ = sess.run(optimizer, feed_dict = {x: batch_xs, y_: batch_ys})
+				_, accuracy = sess.run([optimizer, acc], feed_dict = {x: batch_xs, y_: batch_ys})
 
-			print "epoch " + str(epoch + 1) + " out of " + str(epochs)
-
-		#accuracy
-		correct_prediction = tf.equal(tf.argmax(prediction, 1), tf.argmax(y_, 1))
-		acc = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+			print "epoch " + str(epoch + 1) + " out of " + str(epochs) + ": Training accuracy = " + str(accuracy*100) + "%"
 
 		accuracy = sess.run(acc, feed_dict = {x: mnist.test.images, y_: mnist.test.labels})
 

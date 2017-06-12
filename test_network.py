@@ -6,7 +6,8 @@ import tensorflow_cnn as tc
 accuracy = []
 
 for i in range(5):
-	accuracy.append(kc.main())
+	print "Test #" + str(i + 1)
+	accuracy.append(t.main())
 
 total_accuracy = sum(accuracy)/float(len(accuracy))
 

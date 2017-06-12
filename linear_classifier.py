@@ -35,10 +35,10 @@ def main():
 
 
 def readData():
-	image_train_filename = 'data/train-images-idx3-ubyte.gz'
-	label_train_filename = 'data/train-labels-idx1-ubyte.gz'
-	image_test_filename = 'data/t10k-images-idx3-ubyte.gz'
-	label_test_filename = 'data/t10k-labels-idx1-ubyte.gz'
+	image_train_filename = 'MNIST_data/train-images-idx3-ubyte.gz'
+	label_train_filename = 'MNIST_data/train-labels-idx1-ubyte.gz'
+	image_test_filename = 'MNIST_data/t10k-images-idx3-ubyte.gz'
+	label_test_filename = 'MNIST_data/t10k-labels-idx1-ubyte.gz'
 
 	print "Opening files"
 
